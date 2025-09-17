@@ -7,34 +7,6 @@ import (
 		"os"
 )
 
-func cleanInput(text string) []string {
-	text  = strings.ToLower(text)
-	words := strings.Fields(text)
-	return words
-}
-
-type cliCommand struct {
-	name string
-	description string
-	callback func() error
-}
-
-
-func getCommands() map[string]cliCommand {
-	return map[string]cliCommand {
-		"help": {
-			name: 		"help",
-			description: 	"Displays a help message",
-			callback: 	commandHelp,
-		},
-		"exit": {
-			name: 		"exit",
-			description:	"Exit the Pokedex",
-			callback:	commandExit,
-		},
-	}
-}
-
 func startRepl() {
 
 	reader := bufio.NewScanner(os.Stdin)
@@ -62,21 +34,38 @@ func startRepl() {
 			fmt.Println("Unknown command")
 			continue
 		}
-
-		//  k, _ := range commandMap {
-		// 	if commandName == k {
-		// 		found = true
-		// 		commandMap[k].callback()
-		// 	} 		
-		// }
-		//
-		// if !found {
-		// 	fmt.Print("Unknown command")
-		// }
-
-
-		// fmt.Printf("Your command was: %s", commandName)
-
 	}
 }
 
+func cleanInput(text string) []string {
+	text  = strings.ToLower(text)
+	words := strings.Fields(text)
+	return words
+}
+
+type cliCommand struct {
+	name string
+	description string
+	callback func() error
+}
+
+
+func getCommands() map[string]cliCommand {
+	return map[string]cliCommand {
+		"help": {
+			name: 		"help",
+			description: 	"Displays a help message",
+			callback: 	commandHelp,
+		},
+		"exit": {
+			name: 		"exit",
+			description:	"Exit the Pokedex",
+			callback:	commandExit,
+		},
+		"map": {
+			name: 		"map",
+			description:	"Displays the names of 20 location areas in Pokemon world",
+			callback:	commandMap,
+		},
+	}
+}
