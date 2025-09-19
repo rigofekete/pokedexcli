@@ -2,51 +2,45 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"encoding/json"
-	"io"
+	"errors"
 )
 
 
-type LocationPage struct {
-	Count    int    `json:"count"`
-	Next     string `json:"next"`
-	Previous any    `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	} `json:"results"`
-}
-
-
-func commandMap() error {
-	res, err := http.Get("https://pokeapi.co/api/v2/location-area")
-	if err != nil {
-		return fmt.Errorf("Error getting pokeapi data: %w ", err)
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode < 200 {
-		return fmt.Errorf("non-OK HTTP status: %s", res.Status)
-	}
-	
-
-	data, err := io.ReadAll(res.Body)
+func commandMapf(cfg *config) error {
+	locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
 	if err != nil {
 		return err
 	}
 
-	var page LocationPage
+	cfg.nextLocationsURL = locationsResp.Next
+	cfg.prevLocationsURL = locationsResp.Previous
 
-	if err := json.Unmarshal(data, &page); err != nil {
-		return fmt.Errorf("error unmarshalling data: %w", err)
+	for _, loc := range locationsResp.Results {
+		fmt.Println(loc.Name)
 	}
-
-	for i := range page.Results {
-		fmt.Println(page.Results[i].Name)
-	}
-
-	// fmt.Println(page)
-		
 	return nil
 }
+
+
+func commandMapb(cfg *config) error {
+	if cfg.prevLocationsURL == nil {
+		return errors.New("you're on the first page")
+	}
+
+	locationResp, err := cfg.pokeapiClient.ListLocations(cfg.prevLocationsURL)
+	if err != nil {
+		return err
+	}
+
+	cfg.nextLocationsURL = locationResp.Next
+	cfg.prevLocationsURL = locationResp.Previous
+
+	for _, loc := range locationResp.Results {
+		fmt.Println(loc.Name)
+	}
+	return nil
+}
+
+
+
+
