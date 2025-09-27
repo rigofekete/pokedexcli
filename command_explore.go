@@ -5,23 +5,22 @@ import (
 	"fmt"
 )
 
-func commandExplore(cfg *config, area *string) error {
-	if area == nil || *area == "" {
+func commandExplore(cfg *config, args ...string) error {
+	if len(args) != 1 {
 		return errors.New("\nexplore command needs an area parameter (explore <area_name>)\n") 
 	}
 
-	fmt.Printf("\nExploring %s...\n", *area)
-	areaList, err := cfg.pokeapiClient.ListAreas(*area)
+	name := args[0]
+	fmt.Printf("\nExploring %s...\n", name)
+	areaList, err := cfg.pokeapiClient.GetLocation(name)
 	if err != nil {
 		return err
 	}
 
 	fmt.Println("Found Pokemon:")
-	for _, s := range areaList.PokemonEncounters {
-		fmt.Printf(" - %s\n", s.Pokemon.Name)
+	for _, encounter := range areaList.PokemonEncounters {
+		fmt.Printf(" - %s\n", encounter.Pokemon.Name)
 	}
 
 	return nil
-
-
 }

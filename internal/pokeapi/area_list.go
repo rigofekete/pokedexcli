@@ -7,7 +7,7 @@ import (
 	// "fmt"
 )
 
-func (c *Client) ListAreas(area string) (RespShallowAreas, error)  {
+func (c *Client) GetLocation(area string) (RespShallowAreas, error)  {
 
 	url := baseURL + "/location-area/" + area
 
