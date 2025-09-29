@@ -64,3 +64,28 @@ type Location struct {
 	} `json:"pokemon_encounters"`
 }
 
+
+type Pokemon struct {
+	Name 	string 		`json:"name"`
+	BaseXP 	int 		`json:"base_experience"`
+	Height 	int 		`json:"height"`
+	Weight 	int 		`json:"weight"`
+	Stats 	[]PokemonStat 	`json:"stats"`
+	Types 	[]PokemonType 	`json:"types"`
+}
+
+
+type PokemonStat struct {
+	BaseStat int         `json:"base_stat"`
+	Effort   int   	     `json:"effort"`
+	Stat     NamedAPI    `json:"stat"`
+}
+
+type PokemonType struct {
+	Type NamedAPI  `json:"type"`
+}
+
+type NamedAPI struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
