@@ -17,7 +17,7 @@ func (c *Client) GetPokemon(pokemonName string) (Pokemon, error) {
 			return Pokemon{}, err
 		}
 
-		return Pokemon{}, nil
+		return pokemonResp, nil
 	}
 
 
@@ -44,8 +44,8 @@ func (c *Client) GetPokemon(pokemonName string) (Pokemon, error) {
 	if err != nil {
 		return Pokemon{}, err
 	}
+
 	
 	c.cache.Add(url, dat)
-
 	return pokemonResp, nil
 }

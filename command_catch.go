@@ -20,7 +20,13 @@ func commandCatch(cfg *config, args ...string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("pokemon base experience: %v\n", pokemonData.BaseXP)
+
+
+	// Debug logs 
+	// fmt.Printf("PokemonData 1: %v", pokemonData)
+	// fmt.Printf("pokemon base experience: %v\n", pokemonData.BaseXP)
+	// fmt.Printf("pokemon name: %s\n", pokemonData.Name)
+	// fmt.Printf("pokemon data: %v\n", pokemonData)
 
 	xp := pokemonData.BaseXP
 	var chance int
@@ -34,15 +40,22 @@ func commandCatch(cfg *config, args ...string) error {
 	}
 
 	chanceRes := rand.Intn(chance) + 1
-	fmt.Printf("chance result: %v\n", chanceRes)
+
+	// Debug log 
+	// fmt.Printf("chance result: %v\n", chanceRes)
 
 	if chanceRes == chance {
-		fmt.Printf("%s was caught\n", pokemonData.Name)
-		cfg.pokeapiClient.Pokedex[pokemonData.Name] = pokemonData
+		fmt.Printf("%s was caught\n", name)
+		fmt.Println("You may now inspect it with the inspect command.")
+
+		cfg.pokeapiClient.Pokedex[name] = pokemonData
+		// Debug logs 
+		// fmt.Printf("PokemonData 1: %v", pokemonData)
+		// fmt.Printf("Pokedex list: %v", cfg.pokeapiClient.Pokedex)
 		return nil
 	}
 
-	fmt.Printf("%s escaped!\n", pokemonData.Name)
+	fmt.Printf("%s escaped!\n", name)
 	return nil
 }
 
